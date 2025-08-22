@@ -23,14 +23,14 @@ fi
 
 # 安装依赖包
 echo "安装依赖包..."
-python3 -m pip install -r requirements_final.txt
+python3 -m pip install -r requirements.txt
 
 if [ $? -eq 0 ]; then
     echo "✅ 依赖包安装成功"
 else
     echo "❌ 依赖包安装失败"
     echo "尝试使用 --user 参数安装..."
-    python3 -m pip install --user -r requirements_final.txt
+    python3 -m pip install --user -r requirements.txt
     if [ $? -eq 0 ]; then
         echo "✅ 依赖包安装成功（用户模式）"
     else
@@ -43,6 +43,6 @@ echo
 echo "=== 安装完成 ==="
 echo "使用方法："
 echo "1. 确保核桃图片文件名为 test_output.jpg"
-echo "2. 运行: python3 walnut_detector_final.py"
+echo "2. 运行: python3 walnut_detector.py"
 echo "3. 查看生成的检测结果文件"
 echo

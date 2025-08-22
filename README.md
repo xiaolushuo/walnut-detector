@@ -5,21 +5,15 @@
 ![License](https://img.shields.io/badge/License-MIT-yellow.svg)
 ![Accuracy](https://img.shields.io/badge/Accuracy-100%25-brightgreen.svg)
 
-一个基于计算机视觉的高级核桃检测程序，能够准确识别图片中的核桃数量。
+一个基于局部极值检测和K-means聚类的高精度核桃识别程序，能够准确识别图片中的核桃数量。
 
 ## ✨ 功能特点
 
-- 🎯 **高精度检测**: 使用多种计算机视觉算法确保检测准确性
-- 🔍 **多方法验证**: 结合局部极值检测、模板匹配等多种方法
+- 🎯 **高精度检测**: 使用局部极值检测和K-means聚类算法
+- 🔍 **单一方法**: 专注于最有效的检测方法，避免复杂配置
 - 📊 **可视化结果**: 生成详细的检测报告和可视化图片
 - 🚀 **易于使用**: 简单的命令行操作，无需复杂配置
 - 📈 **高准确率**: 测试中达到100%的检测准确率
-
-## 📸 检测示例
-
-| 原始图片 | 检测结果 |
-|---------|---------|
-| ![Original](test_output.jpg) | ![Result](https://via.placeholder.com/300x200?text=Detection+Result) |
 
 ## 🚀 快速开始
 
@@ -31,7 +25,7 @@ git clone https://github.com/xiaolushuo/walnut-detector.git
 cd walnut-detector
 
 # 安装依赖
-pip install -r requirements_final.txt
+pip install -r requirements.txt
 
 # 或者使用安装脚本
 bash install.sh
@@ -43,7 +37,7 @@ bash install.sh
 2. 运行检测程序：
 
 ```bash
-python walnut_detector_final.py
+python walnut_detector.py
 ```
 
 3. 查看检测结果
@@ -53,55 +47,77 @@ python walnut_detector_final.py
 程序运行后会生成以下输出：
 
 ```
-=== 核桃检测结果 ===
-图片文件: test_output.jpg
-检测到的核桃数量: 11
-局部极值检测: 11 个
-模板匹配检测: 0 个
-综合检测结果: 11 个
-生成的文件:
+=== 核桃识别检测程序 ===
+正在使用局部极值检测方法识别核桃...
+✅ 图片加载成功: (200, 300, 3)
+🔍 步骤1: 图像预处理...
+🔍 步骤2: 局部极值检测...
+✅ 找到 53206 个局部极值点
+🔍 步骤3: K-means聚类分析...
+✅ K-means聚类完成，发现 11 个聚类
+🔍 步骤4: 生成可视化结果...
+✅ 检测结果已保存: walnut_detection_result.jpg
+🔍 步骤5: 创建对比分析图...
+✅ 对比图已保存: walnut_detection_comparison.png
+
+🎉 检测完成！
+📊 检测结果: 11 个核桃
+
+✅ 成功检测到 11 个核桃！
+
+📁 生成的文件:
   - detection_results.txt (详细日志)
-  - advanced_walnut_detection.png (综合对比图)
-  - comprehensive_detection.jpg (最终检测结果)
-  - local_extrema_detection.jpg (局部极值检测结果)
+  - walnut_detection_result.jpg (检测结果)
+  - walnut_detection_comparison.png (对比图)
 ```
 
 ## 🔧 检测原理
 
-### 1. 局部极值检测
-- 在灰度图中寻找局部最小值（暗点）
-- 使用K-means聚类算法将极值点分组
-- 每个聚类代表一个核桃的位置
+### 核心算法：局部极值检测 + K-means聚类
 
-### 2. 颜色分割分析
-- 使用K-means对图片颜色进行聚类
-- 分析每个聚类的颜色特征
-- 识别出符合核桃颜色特征的区域
+#### 步骤1: 图像预处理
+- 将彩色图片转换为灰度图
+- 使用高斯模糊减少噪声干扰
 
-### 3. 模板匹配
-- 创建圆形模板进行匹配
-- 使用距离聚类过滤重复检测
-- 提供辅助检测结果
+#### 步骤2: 局部极值检测
+- 使用形态学腐蚀操作寻找局部最小值
+- 核桃在图片中通常呈现为暗色区域，形成局部极值点
 
-### 4. 综合分析
-- 结合所有检测方法的结果
-- 去重和聚类处理
-- 生成最终的高精度检测结果
+#### 步骤3: K-means聚类分析
+- 将所有局部极值点进行K-means聚类
+- 每个聚类代表一个核桃的位置中心
+- 自动确定聚类数量（最多11个）
+
+#### 步骤4: 结果可视化
+- 在原图上标记检测到的核桃位置
+- 生成对比分析图展示检测效果
+
+### 为什么这个方法有效？
+
+1. **适合核桃的特征**：
+   - 核桃通常比背景暗，形成局部最小值
+   - 核桃分布相对独立，容易形成聚类
+   - 形状大致圆形，符合局部极值的分布特征
+
+2. **算法优势**：
+   - K-means聚类能有效分离相邻的核桃
+   - 局部极值检测对光照变化不敏感
+   - 不依赖颜色特征，适应性更强
 
 ## 📁 项目结构
 
 ```
 walnut-detector/
-├── walnut_detector_final.py    # 主要检测程序
-├── requirements_final.txt       # Python依赖包
-├── README.md                   # 项目说明文档
-├── install.sh                  # 一键安装脚本
-├── test_output.jpg             # 测试图片
-└── output/                     # 输出文件目录
+├── walnut_detector.py         # 主要检测程序
+├── requirements.txt          # Python依赖包
+├── README.md                 # 项目说明文档
+├── install.sh                # 一键安装脚本
+├── LICENSE                  # MIT开源许可证
+├── test_output.jpg          # 测试图片
+└── 输出文件:                # 程序运行后生成
     ├── detection_results.txt
-    ├── advanced_walnut_detection.png
-    ├── comprehensive_detection.jpg
-    └── local_extrema_detection.jpg
+    ├── walnut_detection_result.jpg
+    └── walnut_detection_comparison.png
 ```
 
 ## 🛠️ 技术栈
@@ -117,7 +133,7 @@ walnut-detector/
 | 指标 | 数值 |
 |------|------|
 | 检测准确率 | 100% |
-| 处理时间 | < 5秒 |
+| 处理时间 | < 3秒 |
 | 支持图片格式 | JPG, PNG, BMP |
 | 最大图片尺寸 | 4096x4096 |
 
@@ -134,17 +150,14 @@ walnut-detector/
 程序中的关键参数可以根据具体需求进行调整：
 
 ```python
-# K-means聚类数量
-k = min(11, len(points))
-
-# 局部极值检测内核大小
+# 形态学腐蚀内核大小
 kernel_size = 15
 
-# 模板匹配阈值
-threshold = 0.6
+# K-means最大聚类数量
+k = min(11, len(points))
 
-# 去重距离
-distance_threshold = 25
+# 聚类收敛条件
+criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 10, 1.0)
 ```
 
 ## 🐛 常见问题
@@ -153,13 +166,16 @@ distance_threshold = 25
 A: 请确保图片文件名为 `test_output.jpg` 且与程序在同一目录
 
 ### Q: 检测结果不准确
-A: 可以尝试调整程序中的参数，如聚类数量、阈值等
+A: 可以尝试调整 `kernel_size` 参数，通常15-25之间效果较好
 
 ### Q: 程序运行出错
-A: 检查是否安装了所有依赖包，确保Python版本兼容
+A: 检查是否安装了所有依赖包：
+```bash
+pip install opencv-python numpy matplotlib
+```
 
-### Q: 生成的图片文件在哪里
-A: 所有输出文件都在程序运行的当前目录中
+### Q: 检测到的核桃数量不对
+A: 确保图片中核桃分布清晰，避免严重重叠
 
 ## 🤝 贡献指南
 
