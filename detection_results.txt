@@ -14,5 +14,8 @@ K-means found 11 clusters
   Cluster 9: Center=(53.9, 172.9), Points=5669
   Cluster 10: Center=(196.3, 100.9), Points=4784
   Cluster 11: Center=(256.0, 160.3), Points=6884
+Image dimensions: 300x200
+Base circle radius: 33px
+Test large circles saved with radius: 50px
 5 different marking methods saved
 Main detection result saved
