@@ -90,51 +90,61 @@ def walnut_detector():
             # 步骤4: 创建多种标记方式的对比图
             print("🔍 步骤4: 创建多种标记方式对比图...")
             
-            # 方法1: 简单红色圆点 + 白色数字
+            # 方法1: 红色圆圈 + 白色数字（简单清晰）
             marked_method1 = image.copy()
             for i, center in enumerate(cluster_centers):
                 center_x, center_y = int(center[0]), int(center[1])
-                cv2.circle(marked_method1, (center_x, center_y), 8, (0, 0, 255), -1)
-                cv2.putText(marked_method1, str(i+1), (center_x + 15, center_y - 15), 
+                # 用红色圆圈圈住核桃
+                cv2.circle(marked_method1, (center_x, center_y), 30, (0, 0, 255), 3)
+                # 在圆圈外添加白色数字
+                cv2.putText(marked_method1, str(i+1), (center_x + 35, center_y - 25), 
                            cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 255, 255), 2)
             
-            # 方法2: 黄色圆圈 + 黑色数字
+            # 方法2: 红色圆圈 + 黄色背景 + 黑色数字（高对比度）
             marked_method2 = image.copy()
             for i, center in enumerate(cluster_centers):
                 center_x, center_y = int(center[0]), int(center[1])
-                cv2.circle(marked_method2, (center_x, center_y), 15, (0, 255, 255), 2)
-                cv2.putText(marked_method2, str(i+1), (center_x - 8, center_y + 8), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 0, 0), 3)
+                # 用红色圆圈圈住核桃
+                cv2.circle(marked_method2, (center_x, center_y), 35, (0, 0, 255), 4)
+                # 在中心添加黄色背景圆圈
+                cv2.circle(marked_method2, (center_x, center_y), 12, (0, 255, 255), -1)
+                # 添加黑色数字
+                cv2.putText(marked_method2, str(i+1), (center_x - 6, center_y + 6), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.9, (0, 0, 0), 2)
             
-            # 方法3: 绿色方框 + 白色数字
+            # 方法3: 红色圆圈 + 绿色数字（醒目）
             marked_method3 = image.copy()
             for i, center in enumerate(cluster_centers):
                 center_x, center_y = int(center[0]), int(center[1])
-                cv2.rectangle(marked_method3, (center_x - 12, center_y - 12), 
-                             (center_x + 12, center_y + 12), (0, 255, 0), 2)
-                cv2.putText(marked_method3, str(i+1), (center_x - 8, center_y + 8), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 0.9, (255, 255, 255), 2)
+                # 用红色圆圈圈住核桃
+                cv2.circle(marked_method3, (center_x, center_y), 32, (0, 0, 255), 3)
+                # 在圆圈上方添加绿色数字
+                cv2.putText(marked_method3, str(i+1), (center_x - 8, center_y - 40), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 0), 3)
             
-            # 方法4: 蓝色圆圈背景 + 白色数字（大字体）
+            # 方法4: 红色圆圈 + 白色背景 + 蓝色数字（主要结果）
             marked_method4 = image.copy()
             for i, center in enumerate(cluster_centers):
                 center_x, center_y = int(center[0]), int(center[1])
-                cv2.circle(marked_method4, (center_x, center_y), 20, (255, 0, 0), 3)
-                cv2.circle(marked_method4, (center_x, center_y), 17, (255, 255, 255), -1)
-                cv2.putText(marked_method4, str(i+1), (center_x - 8, center_y + 8), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 255), 3)
+                # 用红色圆圈圈住核桃
+                cv2.circle(marked_method4, (center_x, center_y), 30, (0, 0, 255), 3)
+                # 在中心添加白色背景圆圈
+                cv2.circle(marked_method4, (center_x, center_y), 10, (255, 255, 255), -1)
+                # 添加蓝色数字
+                cv2.putText(marked_method4, str(i+1), (center_x - 6, center_y + 6), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 0, 0), 2)
             
-            # 方法5: 原始复杂多层设计
+            # 方法5: 双层红色圆圈 + 白色数字（专业设计）
             marked_method5 = image.copy()
             for i, center in enumerate(cluster_centers):
                 center_x, center_y = int(center[0]), int(center[1])
-                cv2.circle(marked_method5, (center_x, center_y), 25, (0, 0, 255), 4)
-                cv2.circle(marked_method5, (center_x, center_y), 22, (255, 255, 255), -1)
-                cv2.circle(marked_method5, (center_x, center_y), 20, (0, 0, 255), 2)
-                cv2.putText(marked_method5, str(i+1), (center_x - 10, center_y + 10), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 0), 4)
-                cv2.putText(marked_method5, str(i+1), (center_x - 10, center_y + 10), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 2)
+                # 外层红色圆圈
+                cv2.circle(marked_method5, (center_x, center_y), 35, (0, 0, 255), 2)
+                # 内层红色圆圈
+                cv2.circle(marked_method5, (center_x, center_y), 28, (0, 0, 255), 2)
+                # 在圆圈外添加白色数字
+                cv2.putText(marked_method5, str(i+1), (center_x + 40, center_y), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255, 255, 255), 3)
             
             # 保存各种方法的单独结果
             cv2.imwrite('walnut_detection_method1.jpg', marked_method1)
@@ -175,32 +185,31 @@ def walnut_detector():
                 plt.title('Grayscale')
                 plt.axis('off')
                 
-                # 方法1: 简单红色圆点 + 白色数字
-                method1_rgb = cv2.cvtColor(marked_method1, cv2.COLOR_BGR2RGB)
+                # 方法1: 简单红色圆圈 + 白色数字（简单清晰）
                 plt.subplot(2, 3, 3)
                 plt.imshow(method1_rgb)
-                plt.title('Method 1: Red Dot + White Text')
+                plt.title('Method 1: Red Circle + White Text')
                 plt.axis('off')
                 
-                # 方法2: 黄色圆圈 + 黑色数字
+                # 方法2: 红色圆圈 + 黄色背景 + 黑色数字（高对比度）
                 method2_rgb = cv2.cvtColor(marked_method2, cv2.COLOR_BGR2RGB)
                 plt.subplot(2, 3, 4)
                 plt.imshow(method2_rgb)
-                plt.title('Method 2: Yellow Circle + Black Text')
+                plt.title('Method 2: Red Circle + Yellow Center')
                 plt.axis('off')
                 
-                # 方法3: 绿色方框 + 白色数字
+                # 方法3: 红色圆圈 + 绿色数字（醒目）
                 method3_rgb = cv2.cvtColor(marked_method3, cv2.COLOR_BGR2RGB)
                 plt.subplot(2, 3, 5)
                 plt.imshow(method3_rgb)
-                plt.title('Method 3: Green Square + White Text')
+                plt.title('Method 3: Red Circle + Green Text')
                 plt.axis('off')
                 
-                # 方法4: 蓝色圆圈背景 + 白色数字（主要结果）
+                # 方法4: 红色圆圈 + 白色背景 + 蓝色数字（主要结果）
                 method4_rgb = cv2.cvtColor(marked_method4, cv2.COLOR_BGR2RGB)
                 plt.subplot(2, 3, 6)
                 plt.imshow(method4_rgb)
-                plt.title('Method 4: Blue Circle + White Text (Main)')
+                plt.title('Method 4: Red Circle + White Center (Main)')
                 plt.axis('off')
                 
                 plt.tight_layout()
@@ -210,11 +219,11 @@ def walnut_detector():
                 # 创建第二个对比图，显示方法5和详细对比
                 plt.figure(figsize=(15, 5))
                 
-                # 方法5: 复杂多层设计
+                # 方法5: 双层红色圆圈 + 白色数字（专业设计）
                 method5_rgb = cv2.cvtColor(marked_method5, cv2.COLOR_BGR2RGB)
                 plt.subplot(1, 3, 1)
                 plt.imshow(method5_rgb)
-                plt.title('Method 5: Complex Multi-layer Design')
+                plt.title('Method 5: Double Red Circles + White Text')
                 plt.axis('off')
                 
                 # 主要结果放大
@@ -232,11 +241,11 @@ def walnut_detector():
                 plt.text(0.1, 0.5, f'K-means Clusters: {n_clusters}', fontsize=12, transform=plt.gca().transAxes)
                 plt.text(0.1, 0.4, f'Accuracy: 100%', fontsize=12, transform=plt.gca().transAxes)
                 plt.text(0.1, 0.2, 'Marking Methods:', fontsize=14, fontweight='bold', transform=plt.gca().transAxes)
-                plt.text(0.1, 0.1, '1. Red Dot + White Text', fontsize=10, transform=plt.gca().transAxes)
-                plt.text(0.1, 0.0, '2. Yellow Circle + Black Text', fontsize=10, transform=plt.gca().transAxes)
-                plt.text(0.1, -0.1, '3. Green Square + White Text', fontsize=10, transform=plt.gca().transAxes)
-                plt.text(0.1, -0.2, '4. Blue Circle + White Text', fontsize=10, transform=plt.gca().transAxes)
-                plt.text(0.1, -0.3, '5. Complex Multi-layer Design', fontsize=10, transform=plt.gca().transAxes)
+                plt.text(0.1, 0.1, '1. Red Circle + White Text', fontsize=10, transform=plt.gca().transAxes)
+                plt.text(0.1, 0.0, '2. Red Circle + Yellow Center', fontsize=10, transform=plt.gca().transAxes)
+                plt.text(0.1, -0.1, '3. Red Circle + Green Text', fontsize=10, transform=plt.gca().transAxes)
+                plt.text(0.1, -0.2, '4. Red Circle + White Center', fontsize=10, transform=plt.gca().transAxes)
+                plt.text(0.1, -0.3, '5. Double Red Circles + White Text', fontsize=10, transform=plt.gca().transAxes)
                 plt.axis('off')
                 
                 plt.tight_layout()
@@ -271,11 +280,11 @@ def walnut_detector():
             print(f"\n📁 生成的文件:")
             print(f"  - detection_results.txt (详细日志)")
             print(f"  - walnut_detection_result.jpg (主要检测结果)")
-            print(f"  - walnut_detection_method1.jpg (方法1: 红点+白字)")
-            print(f"  - walnut_detection_method2.jpg (方法2: 黄圈+黑字)")
-            print(f"  - walnut_detection_method3.jpg (方法3: 绿框+白字)")
-            print(f"  - walnut_detection_method4.jpg (方法4: 蓝圈+白字)")
-            print(f"  - walnut_detection_method5.jpg (方法5: 复杂多层)")
+            print(f"  - walnut_detection_method1.jpg (方法1: 红圈+白字)")
+            print(f"  - walnut_detection_method2.jpg (方法2: 红圈+黄心+黑字)")
+            print(f"  - walnut_detection_method3.jpg (方法3: 红圈+绿字)")
+            print(f"  - walnut_detection_method4.jpg (方法4: 红圈+白心+蓝字)")
+            print(f"  - walnut_detection_method5.jpg (方法5: 双层红圈+白字)")
             print(f"  - walnut_detection_comparison.png (6宫格对比图)")
             print(f"  - walnut_detection_comparison2.png (详细统计图)")
             
