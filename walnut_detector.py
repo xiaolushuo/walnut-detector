@@ -90,14 +90,16 @@ def walnut_detector():
             # 步骤4: 可视化结果
             print("🔍 步骤4: 生成可视化结果...")
             
-            # 创建标记图片
+            # 创建标记图片 - 在核桃身上直接添加数字标记
             marked_image = image.copy()
             for i, center in enumerate(cluster_centers):
-                # 在核桃中心画绿色圆点
-                cv2.circle(marked_image, (int(center[0]), int(center[1])), 8, (0, 255, 0), -1)
-                # 添加编号
-                cv2.putText(marked_image, str(i+1), (int(center[0])+10, int(center[1])), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 0.6, (255, 255, 255), 2)
+                # 在核桃中心画红色圆圈背景（更醒目）
+                cv2.circle(marked_image, (int(center[0]), int(center[1])), 20, (0, 0, 255), 3)
+                # 在圆圈内填充白色背景
+                cv2.circle(marked_image, (int(center[0]), int(center[1])), 18, (255, 255, 255), -1)
+                # 添加黑色数字编号
+                cv2.putText(marked_image, str(i+1), (int(center[0])-8, int(center[1])+8), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 0), 3)
             
             # 保存结果图片
             cv2.imwrite('walnut_detection_result.jpg', marked_image)
@@ -125,7 +127,7 @@ def walnut_detector():
                 plt.title('Grayscale')
                 plt.axis('off')
                 
-                # 检测结果
+                # 检测结果 - 显示带有数字标记的图片
                 result_rgb = cv2.cvtColor(marked_image, cv2.COLOR_BGR2RGB)
                 plt.subplot(1, 3, 3)
                 plt.imshow(result_rgb)
