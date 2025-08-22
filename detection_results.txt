@@ -1,0 +1,25 @@
+=== Walnut Detection Results ===
+Method: Local Extrema Detection with K-means Clustering
+Image loaded successfully. Size: (200, 300, 3)
+Found 53206 local minima points
+K-means found 11 clusters
+  Cluster 1: Center=(175.8, 32.0), Points=4602
+  Cluster 2: Center=(28.7, 110.8), Points=4593
+  Cluster 3: Center=(253.9, 20.6), Points=3453
+  Cluster 4: Center=(272.1, 83.9), Points=3654
+  Cluster 5: Center=(107.9, 35.4), Points=4766
+  Cluster 6: Center=(161.4, 169.4), Points=6024
+  Cluster 7: Center=(100.3, 113.6), Points=5097
+  Cluster 8: Center=(31.8, 31.5), Points=3680
+  Cluster 9: Center=(53.9, 172.9), Points=5669
+  Cluster 10: Center=(196.3, 100.9), Points=4784
+  Cluster 11: Center=(256.0, 160.3), Points=6884
+Detection result image saved
+Comparison image saved
+
+=== FINAL RESULTS ===
+Detection method: Local Extrema Detection
+Total local minima points: 53206
+K-means clusters: 11
+Estimated walnut count: 11
+=== Detection Complete ===
