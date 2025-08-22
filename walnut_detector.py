@@ -87,92 +87,87 @@ def walnut_detector():
             
             f.flush()
             
-            # 步骤4: 创建多种标记方式的对比图
-            print("🔍 步骤4: 创建多种标记方式对比图...")
+            # 步骤4: 基于调试结果修复圆圈位置问题
+            print("🔍 步骤4: 基于调试结果修复圆圈位置问题...")
             
-            # 分析核桃大小，确定合适的圆圈半径
-            # 基于图片大小和聚类点分布，调整圆圈大小
+            # 分析图片尺寸和核桃分布
             image_height, image_width = image.shape[:2]
-            # 根据图片尺寸动态调整圆圈大小 - 使用更大的半径
-            base_radius = min(image_width, image_height) // 6  # 增大基础半径
-            
             print(f"📏 图片尺寸: {image_width}x{image_height}")
+            
+            # 根据调试结果，调整圆圈大小和位置
+            # 从调试中发现需要更大的圆圈来覆盖核桃
+            base_radius = min(image_width, image_height) // 5  # 进一步增大基础半径
+            large_radius = min(image_width, image_height) // 4  # 大圆圈
+            
             print(f"📏 基础圆圈半径: {base_radius}px")
+            print(f"📏 大圆圈半径: {large_radius}px")
             f.write(f"Image dimensions: {image_width}x{image_height}\n")
             f.write(f"Base circle radius: {base_radius}px\n")
+            f.write(f"Large circle radius: {large_radius}px\n")
             f.flush()
             
-            # 额外创建一个测试方法，使用更大的圆圈
-            marked_test = image.copy()
-            test_radius = min(image_width, image_height) // 4  # 更大的测试半径
-            for i, center in enumerate(cluster_centers):
-                center_x, center_y = int(center[0]), int(center[1])
-                # 用非常大的红色圆圈圈住核桃
-                cv2.circle(marked_test, (center_x, center_y), test_radius, (0, 0, 255), 5)
-                # 添加大号白色数字
-                cv2.putText(marked_test, str(i+1), (center_x - 15, center_y + 15), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 2.0, (255, 255, 255), 5)
-            
-            cv2.imwrite('walnut_detection_test_large.jpg', marked_test)
-            print(f"🧪 测试大圆圈结果已保存: walnut_detection_test_large.jpg (半径: {test_radius}px)")
-            f.write(f"Test large circles saved with radius: {test_radius}px\n")
-            f.flush()
-            
-            # 方法1: 大红色圆圈 + 白色数字（简单清晰）
+            # 方法1: 优化的大红色圆圈 + 白色数字（主要推荐）
             marked_method1 = image.copy()
             for i, center in enumerate(cluster_centers):
                 center_x, center_y = int(center[0]), int(center[1])
-                # 用更大的红色圆圈圈住核桃
-                cv2.circle(marked_method1, (center_x, center_y), base_radius, (0, 0, 255), 4)
-                # 在圆圈外添加白色数字
-                cv2.putText(marked_method1, str(i+1), (center_x + base_radius + 5, center_y - 5), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 255, 255), 3)
+                # 使用大圆圈确保覆盖核桃
+                cv2.circle(marked_method1, (center_x, center_y), large_radius, (0, 0, 255), 4)
+                # 在圆圈外添加醒目的白色数字
+                cv2.putText(marked_method1, str(i+1), (center_x + large_radius + 10, center_y), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255, 255, 255), 4)
             
-            # 方法2: 大红色圆圈 + 黄色背景 + 黑色数字（高对比度）
+            # 方法2: 超大红色圆圈 + 黄色中心 + 黑色数字
             marked_method2 = image.copy()
             for i, center in enumerate(cluster_centers):
                 center_x, center_y = int(center[0]), int(center[1])
-                # 用更大的红色圆圈圈住核桃
-                cv2.circle(marked_method2, (center_x, center_y), base_radius + 5, (0, 0, 255), 5)
-                # 在中心添加黄色背景圆圈
-                cv2.circle(marked_method2, (center_x, center_y), 15, (0, 255, 255), -1)
+                # 使用超大圆圈
+                cv2.circle(marked_method2, (center_x, center_y), large_radius + 10, (0, 0, 255), 5)
+                # 在中心添加黄色背景
+                cv2.circle(marked_method2, (center_x, center_y), 20, (0, 255, 255), -1)
                 # 添加黑色数字
-                cv2.putText(marked_method2, str(i+1), (center_x - 8, center_y + 8), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 0), 3)
+                cv2.putText(marked_method2, str(i+1), (center_x - 12, center_y + 12), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 0), 4)
             
-            # 方法3: 大红色圆圈 + 绿色数字（醒目）
+            # 方法3: 双层红色圆圈 + 绿色数字
             marked_method3 = image.copy()
             for i, center in enumerate(cluster_centers):
                 center_x, center_y = int(center[0]), int(center[1])
-                # 用更大的红色圆圈圈住核桃
-                cv2.circle(marked_method3, (center_x, center_y), base_radius + 2, (0, 0, 255), 4)
+                # 外层大圆圈
+                cv2.circle(marked_method3, (center_x, center_y), large_radius + 5, (0, 0, 255), 3)
+                # 内层圆圈
+                cv2.circle(marked_method3, (center_x, center_y), large_radius - 5, (0, 0, 255), 3)
                 # 在圆圈上方添加绿色数字
-                cv2.putText(marked_method3, str(i+1), (center_x - 10, center_y - base_radius - 10), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 255, 0), 4)
+                cv2.putText(marked_method3, str(i+1), (center_x - 15, center_y - large_radius - 15), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0), 5)
             
-            # 方法4: 大红色圆圈 + 白色背景 + 蓝色数字（主要结果）
+            # 方法4: 实心红色圆圈 + 白色数字（主要结果）
             marked_method4 = image.copy()
             for i, center in enumerate(cluster_centers):
                 center_x, center_y = int(center[0]), int(center[1])
-                # 用更大的红色圆圈圈住核桃
-                cv2.circle(marked_method4, (center_x, center_y), base_radius, (0, 0, 255), 4)
+                # 画实心红色圆圈（半透明效果）
+                cv2.circle(marked_method4, (center_x, center_y), large_radius, (0, 0, 255), 3)
+                # 画内部填充圆圈（半透明）
+                overlay = marked_method4.copy()
+                cv2.circle(overlay, (center_x, center_y), large_radius - 3, (0, 0, 255), -1)
+                cv2.addWeighted(overlay, 0.3, marked_method4, 0.7, 0, marked_method4)
                 # 在中心添加白色背景圆圈
-                cv2.circle(marked_method4, (center_x, center_y), 12, (255, 255, 255), -1)
+                cv2.circle(marked_method4, (center_x, center_y), 15, (255, 255, 255), -1)
                 # 添加蓝色数字
-                cv2.putText(marked_method4, str(i+1), (center_x - 8, center_y + 8), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 1.0, (255, 0, 0), 3)
+                cv2.putText(marked_method4, str(i+1), (center_x - 10, center_y + 10), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255, 0, 0), 3)
             
-            # 方法5: 双层大红色圆圈 + 白色数字（专业设计）
+            # 方法5: 最大红色圆圈 + 粗边框 + 白色数字
             marked_method5 = image.copy()
+            max_radius = min(image_width, image_height) // 3  # 最大圆圈
             for i, center in enumerate(cluster_centers):
                 center_x, center_y = int(center[0]), int(center[1])
-                # 外层红色圆圈
-                cv2.circle(marked_method5, (center_x, center_y), base_radius + 8, (0, 0, 255), 3)
-                # 内层红色圆圈
-                cv2.circle(marked_method5, (center_x, center_y), base_radius, (0, 0, 255), 3)
-                # 在圆圈外添加白色数字
-                cv2.putText(marked_method5, str(i+1), (center_x + base_radius + 15, center_y), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 4)
+                # 使用最大圆圈
+                cv2.circle(marked_method5, (center_x, center_y), max_radius, (0, 0, 255), 6)
+                # 添加内部小圆圈
+                cv2.circle(marked_method5, (center_x, center_y), 5, (255, 255, 255), -1)
+                # 在圆圈外添加大号白色数字
+                cv2.putText(marked_method5, str(i+1), (center_x + max_radius + 15, center_y), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 2.0, (255, 255, 255), 6)
             
             # 保存各种方法的单独结果
             cv2.imwrite('walnut_detection_method1.jpg', marked_method1)
