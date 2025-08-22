@@ -90,16 +90,27 @@ def walnut_detector():
             # 步骤4: 可视化结果
             print("🔍 步骤4: 生成可视化结果...")
             
-            # 创建标记图片 - 在核桃身上直接添加数字标记
+            # 创建标记图片 - 在核桃身上添加清晰的数字标注
             marked_image = image.copy()
             for i, center in enumerate(cluster_centers):
-                # 在核桃中心画红色圆圈背景（更醒目）
-                cv2.circle(marked_image, (int(center[0]), int(center[1])), 20, (0, 0, 255), 3)
-                # 在圆圈内填充白色背景
-                cv2.circle(marked_image, (int(center[0]), int(center[1])), 18, (255, 255, 255), -1)
-                # 添加黑色数字编号
-                cv2.putText(marked_image, str(i+1), (int(center[0])-8, int(center[1])+8), 
-                           cv2.FONT_HERSHEY_SIMPLEX, 1.2, (0, 0, 0), 3)
+                center_x, center_y = int(center[0]), int(center[1])
+                
+                # 画更大的红色圆圈边框（更醒目）
+                cv2.circle(marked_image, (center_x, center_y), 25, (0, 0, 255), 4)
+                
+                # 画白色填充圆圈作为背景
+                cv2.circle(marked_image, (center_x, center_y), 22, (255, 255, 255), -1)
+                
+                # 画内圈红色边框
+                cv2.circle(marked_image, (center_x, center_y), 20, (0, 0, 255), 2)
+                
+                # 添加加粗的黑色数字编号
+                cv2.putText(marked_image, str(i+1), (center_x-10, center_y+10), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 0), 4)
+                
+                # 添加白色数字描边（增强可读性）
+                cv2.putText(marked_image, str(i+1), (center_x-10, center_y+10), 
+                           cv2.FONT_HERSHEY_SIMPLEX, 1.5, (255, 255, 255), 2)
             
             # 保存结果图片
             cv2.imwrite('walnut_detection_result.jpg', marked_image)
